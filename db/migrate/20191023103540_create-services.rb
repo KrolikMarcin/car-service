@@ -4,8 +4,8 @@ ROM::SQL.migration do
       primary_key :id
 
       column :start_date, DateTime, null: false
-      column :end_date, DateTime, null: false
-      column :price, String, null: false
+      column :end_date, DateTime
+      column :price, Integer
       foreign_key :user_id, :users
     end
   end
