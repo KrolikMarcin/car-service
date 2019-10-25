@@ -7,6 +7,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'dry-initializer'
 gem 'dry-monads'
 gem 'dry-transaction'
+gem 'grape'
 gem 'pg'
 gem 'puma', '~> 3.11'
 gem 'rails', '~> 5.2.3'
