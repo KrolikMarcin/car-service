@@ -17,8 +17,10 @@ gem 'tzinfo-data'
 
 group :development, :test do
   gem 'dotenv-rails'
+  gem 'faker'
   gem 'pry-byebug'
   gem 'pry-rails'
+  gem 'rom-factory'
   gem 'rspec-rails'
 end
 
