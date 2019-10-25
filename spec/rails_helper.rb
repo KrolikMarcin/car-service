@@ -25,14 +25,6 @@ require 'rspec/rails'
 Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |file| require file }
 Dir[Rails.root.join('spec', 'factories', '**', '*.rb')].sort.each { |file| require file }
 
-# def clean_db
-#   DatabaseCleaner[:sequel, connection: conn].clean_with(:truncation)
-# end
-
-# def conn
-#   ROM.env.gateways[:default].connection
-# end
-
 RSpec.configure do |config|
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and
@@ -46,13 +38,8 @@ RSpec.configure do |config|
   #     end
   #
   # The different available types are documented in the features, such as in
-  # config.before(:suite) do
-  #   DatabaseCleaner[:sequel, connection: conn].strategy = :truncation
-  #   clean_db
-  # end
 
-  # config.before(:each) { clean_db }
-
+  config.include ApiHelpers, type: :request
   # https://relishapp.com/rspec/rspec-rails/docs
   config.infer_spec_type_from_file_location!
 
