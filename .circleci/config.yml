@@ -1,0 +1,72 @@
+version: 2.1
+
+executors:
+  ruby-machine:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/ruby:2.6.3-node
+        environment:
+          BUNDLE_PATH: vendor/bundle
+          GEM_HOME: vendor/bundle
+          DATABASE_URL: postgres://localhost/car-service_development
+      - image: circleci/postgres:11-alpine
+        environment:
+          - POSTGRES_DB: car-service_development
+
+jobs:
+  checkout_code:
+    executor: ruby-machine
+    steps:
+      - checkout
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - .
+
+  build_rails_dependencies:
+    executor: ruby-machine
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - restore_cache:
+          keys:
+            - gems-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+            - gems-v1-{{ arch }}-{{ .Branch }}
+      - run: gem install bundler -v 2.0.2
+      - run: bundle install
+      - save_cache:
+          key: gems-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - vendor/bundle
+
+  run_tests:
+    executor: ruby-machine
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Wait for database
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Create database
+          command: bin/rails db:setup
+      - run:
+          name: Run tests
+          command: |
+            bundle exec rspec --profile 5
+
+workflows:
+  version: 2
+  build_test_deploy:
+    jobs:
+      - checkout_code
+      - build_rails_dependencies:
+          requires:
+            - checkout_code
+      - run_tests:
+          requires:
+            - build_rails_dependencies
