@@ -11,6 +11,14 @@ module V1
           requires(:production_year, type: Date)
         end
       end
+
+      params :filter do
+        optional(:filter, type: Hash)
+      end
+
+      params :sort do
+        optional(:sort, type: Array)
+      end
     end
   end
 end

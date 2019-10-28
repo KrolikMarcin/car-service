@@ -7,7 +7,7 @@ module Cars
     def create_car(user:, car:)
       rom_env
         .relations[:cars]
-        .changeset(:create, car.symbolize_keys)
+        .changeset(:create, car)
         .associate(user)
         .commit
     end

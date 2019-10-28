@@ -3,6 +3,7 @@ module V1
     class Base < Root
       namespace :cars do
         mount Cars::Create
+        mount Cars::Index
       end
     end
   end

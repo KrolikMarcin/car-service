@@ -8,9 +8,14 @@ RSpec.describe Users::CreateUserTransaction do
 
   context 'when everything goes well' do
     let(:email) { Faker::Internet.email }
+    let(:users_relation) { ROM.env.relations[:users] }
 
     it 'creates a user with proper attributes' do
       expect(transaction_call.success).to include(user_params)
+    end
+
+    it 'creates car' do
+      expect { transaction_call }.to change(users_relation, :count).by(1)
     end
 
     it 'returns success' do

@@ -5,14 +5,13 @@ module Services
 
     private
 
-    def find_car(vin:, service:)
-      {
-        car: CarRepo.new(rom_env).by_vin(vin),
-        service: service
-      }
+    def find_car(vin)
+      CarRepo
+        .new(rom_env)
+        .by_vin(vin)
     end
 
-    def create_service(car:, service:)
+    def create_service(car, service:)
       rom_env
         .relations[:services]
         .changeset(:create, service)

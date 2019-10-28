@@ -4,7 +4,7 @@ RSpec.describe Cars::CreateCarTransaction do
   let(:transaction_call) { transaction.call(params) }
   let(:transaction) { described_class.new }
   let(:params) { { user: user, car: car } }
-  let(:user) { Factory.structs[:user] }
+  let(:user) { Factory[:user] }
   let(:car) do
     {
       vin: vin,
@@ -16,10 +16,15 @@ RSpec.describe Cars::CreateCarTransaction do
 
   context 'when everything goes well' do
     let(:vin) { Faker::Lorem.word }
+    let(:cars_relation) { ROM.env.relations[:cars] }
 
     it 'creates a car with proper attributes', :aggregate_failures do
       expect(transaction_call.success[:user_id]).to eq(user.id)
       expect(transaction_call.success).to include(car)
+    end
+
+    it 'creates car' do
+      expect { transaction_call }.to change(cars_relation, :count).by(1)
     end
 
     it 'returns success' do

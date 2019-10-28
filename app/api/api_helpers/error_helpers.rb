@@ -9,7 +9,8 @@ module APIHelpers
     end
 
     def error_422!(hint: nil)
-      handle_error(I18n.t('api.code_422'), 422, hint)
+      dev_hint = hint if Rails.env.development?
+      handle_error(I18n.t('api.code_422'), 422, dev_hint)
     end
 
     private

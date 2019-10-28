@@ -21,8 +21,8 @@ module V1
         end
 
         def user
-          # TODO: implement user authentication
-          { user: UserRepo.new(ROM.env).by_id(1) }
+          # TODO: implement user authentication instead creating custom user
+          { user: Factory[:user] }
         end
       end
 

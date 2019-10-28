@@ -4,4 +4,6 @@ class ServicesRelation < ROM::Relation[:sql]
       belongs_to :car
     end
   end
+
+  dataset { order { id.desc } }
 end
