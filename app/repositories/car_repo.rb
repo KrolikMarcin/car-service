@@ -1,20 +1,27 @@
 class CarRepo < ROM::Repository[:cars]
   def by_id(id)
-    cars.by_pk(id).one
+    cars
+      .by_pk(id)
+      .one
   end
 
   def by_vin(vin)
-    cars.where(vin: vin).one!
-  end
-
-  def all
-    cars.to_a
-  end
-
-  def with_services_by_user_id(user_id)
     cars
-      .by_user(user_id)
-      .combine(:services)
-      .to_a
+      .by_vin(vin)
+      .index
+      .one!
+  end
+
+  def overview(filter: {}, sort: [])
+    filter.reduce(cars.with_services.index) do |memo, (attr, value)|
+      if value.is_a?(Hash)
+        value.reduce(memo) do |m, (a, v)|
+          services = ROM.env.relations[attr]
+          m.left_join(services).where(services[a].is(v))
+        end
+      else
+        memo.where(memo[attr].is(value))
+      end
+    end.order(*sort).to_a
   end
 end
