@@ -6,7 +6,7 @@ ROM::SQL.migration do
       column :start_date, DateTime, null: false
       column :end_date, DateTime
       column :price, Integer
-      foreign_key :user_id, :users
+      foreign_key :user_id, :cars
     end
   end
 end

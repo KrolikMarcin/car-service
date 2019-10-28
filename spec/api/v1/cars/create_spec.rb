@@ -10,9 +10,11 @@ RSpec.describe V1::Cars::Create do
         model: Faker::Company.name,
         production_year: production_year,
         vin: vin
-      }
+      },
+      user_id: user.id
     }
   end
+  let(:user) { Factory[:user] }
 
   before { post_action }
 
