@@ -4,5 +4,6 @@ module V1
 
     mount V1::Users::Base
     mount V1::Cars::Base
+    mount V1::Services::Base
   end
 end
